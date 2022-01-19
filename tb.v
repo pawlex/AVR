@@ -1,5 +1,14 @@
 `timescale 1ns/100ps
 
+`include "avr_core.v"
+`include "avr_io_out.v"
+`include "avr_io_uart.v"
+`include "avr_io_timer.v"
+//`include "main.v"
+`include "flash.v"
+`include "ram.v"
+//`include "avr_io_spi.v"
+
 module tb();
 reg reset_n=0;
 reg clk=0;
@@ -12,7 +21,7 @@ initial begin
     reset_n = 0;
     #10;
     reset_n = 1;
-    #600 $finish;
+    #600000 $finish;
 end
 
 initial begin
@@ -20,29 +29,17 @@ initial begin
     $dumpvars();
 end
 
-/* SOME EXAMPLES */
-initial begin
-    repeat(4) @(posedge clk);
-    reset <= 0;
-end
-
-
-integer my_address = 0;
-initial begin
-    repeat(4) @(posedge clk);
-    wait(wait_req == 0)
-        repeat(100) @(posedge clk)
-            while (my_address < 'h100) @(posedge clk) begin
-                @(posedge clk);
-            end
-        #10000 $finish;
-end
 
 top
     dut
     (
-        .clk(clk),
-        .reset_n(reset_n)
+        .hwclk(clk),
+        .rst(~reset_n),
+        .led(),
+        .ftdi_rx(),
+        .ftdi_tx(),
+        .pin_scl0(),
+        .pin_sda0()
     );
 
 endmodule
