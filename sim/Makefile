@@ -42,7 +42,7 @@ VERILATOR_FLAGS += -O2 -x-assign 0
 # Warn abount lint issues; may not want this on less solid designs
 VERILATOR_FLAGS += -Wall
 # Make waveforms (.vcd)
-#VERILATOR_FLAGS += --trace
+VERILATOR_FLAGS += --trace
 # Check SystemVerilog assertions
 VERILATOR_FLAGS += --assert
 # Generate coverage analysis
@@ -54,10 +54,11 @@ VERILATOR_FLAGS += --coverage
 VERILATOR_FLAGS += -Wno-fatal
 
 # Input files for Verilator
+VERILATOR_FLAGS+=--top-module top
 VERILATOR_INPUT = -f input.vc top.cpp top.v
 VERILATOR_INPUT += ../avr_systick.v ../avr_io_out.v ../avr_io_timer.v ../avr_io_uart.v ../avr_core.v
 VERILATOR_INPUT += ../flash.v ../ram.v ../priority_encoder.v
-#VERILATOR_INPUT += ../uart/uart.v ../uart/uart_tx.v ../uart/uart_rx.v
+VERILATOR_INPUT += ./uart/uart.v ./uart/uart_tx.v ./uart/uart_rx.v
 #VERILATOR_INPUT += ../risc16f84_clk2x.v ../uart/uart.v ../uart/uart_tx.v ../uart/uart_rx.v
 ######################################################################
 default: compile

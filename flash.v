@@ -1,5 +1,5 @@
 module flash
-       #(	parameter	flash_file = "main.mem",
+       #(	parameter	flash_file = "flash.mem",
           parameter	flash_width = 10
         )
        (	input				clk,
@@ -20,7 +20,6 @@ end
 
 initial begin
     $readmemh(flash_file, flash_array);
-    //`include "flash_array.v"
 end
 
 endmodule

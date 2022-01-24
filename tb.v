@@ -35,11 +35,13 @@ top
     (
         .hwclk(clk),
         .rst(~reset_n),
-        .led(),
-        .ftdi_rx(),
-        .ftdi_tx(),
-        .pin_scl0(),
-        .pin_sda0()
+        .uart_prescale(),
+        .uart_tx_data_i(),
+        .uart_rx_data_o(),
+        .uart_rx_ready_i(),
+        .uart_tx_valid_i(),
+        .uart_rx_valid_o(),
+        .uart_tx_ready_o()
     );
 
 endmodule

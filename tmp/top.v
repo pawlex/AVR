@@ -1,4 +1,4 @@
-`timescale 1ns/1ns
+`timescale 100ns/100ns
 
 module top
        (

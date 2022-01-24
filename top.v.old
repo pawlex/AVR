@@ -1,26 +1,14 @@
-`timescale 1ns/1ns
+`timescale 100ns/100ns
 
-module top
-       (
+module top(
            input	hwclk,
            input   rst,
            output  [7:0] led,
-           //input	avr_rx,
-           //output	avr_tx,
-           //input   tb_rx,
-           //output  tb_tx
-           //
-           input [15:0] uart_prescale,
-           input [7:0] uart_tx_data_i,
-           output [7:0] uart_rx_data_o,
-           input uart_rx_ready_i,
-           input uart_tx_valid_i,
-           output uart_rx_valid_o,
-           output uart_tx_ready_o
+           input	ftdi_rx,
+           output	ftdi_tx,
+           inout	pin_scl0,
+           inout	pin_sda0
        );
-
-wire pin_scl0;
-wire pin_sda0;
 
 wire		clk;
 assign clk = hwclk;
@@ -45,12 +33,39 @@ wire [5:0]		io_a;
 wire [7:0]		io_do;
 
 
+//SB_PLL40_CORE
+// #(	.FEEDBACK_PATH("SIMPLE"),
+//	.PLLOUT_SELECT("GENCLK"),
+//	.ENABLE_ICEGATE("0"),
+//	.DIVR(4'b0000),
+//	.DIVF(7'b0111111),
+//	.DIVQ(3'b100),
+//	.FILTER_RANGE(3'b001)
+//  )
+//pll
+// (      .RESETB(1'b1),
+//        .BYPASS(1'b1),
+//	.EXTFEEDBACK(1'b0),
+//	.LATCHINPUTVALUE(1'b0),
+//	.DYNAMICDELAY(8'b00000000),
+//        .REFERENCECLK(hwclk),
+//	.SDI(1'b0),
+//	.SCLK(1'b0),
+//        .PLLOUTGLOBAL(clk)
+// );
+
+//reg [1:0] clkcnt;
+//always @(posedge hwclk) clkcnt <= clkcnt + 1;
+//assign clk = clkcnt[1];
+//BUFG clkcrt ( .I(clkcnt[1]), .O(clk) );
+
 /*****************************************************************************/
 
 ram	 core0_ram ( clk, dmem_re, dmem_we, dmem_a, dmem_di, dmem_do );
 defparam core0_ram.ram_width = dmem_width;
 
 flash	 core0_flash ( clk, pmem_ce,pmem_a, pmem_d );
+//defparam core0_flash.flash_width = pmem_width;
 
 /*****************************************************************************/
 
@@ -106,8 +121,8 @@ wire uart0_txd;
 wire uart0_rxd;
 wire [2:0] uart0_irq;
 
-//assign avr_tx = uart0_txd;
-//assign uart0_rxd = avr_rx;
+assign ftdi_tx = uart0_txd;
+assign uart0_rxd = ftdi_rx;
 
 avr_io_uart uart0
             (	clk, 1'b0,
@@ -116,7 +131,7 @@ avr_io_uart uart0
               uart0_irq
             );
 `else
-assign avr_tx = avr_rx;
+assign ftdi_tx = ftdi_rx;
 wire [2:0] uart0_irq;
 assign uart0_irq = 3'b000;
 `endif
@@ -190,34 +205,29 @@ defparam core0.dmem_width = dmem_width;
 defparam core0.interrupt  = 1;
 defparam core0.intr_width = 2;
 
+
 // Instantiate the UART again, to give us console access
 // to the test bench. :)
 wire uart_rx_i, uart_tx_o, uart_rx, uart_tx;
-//assign uart_rx_i = uart_tx;
-//assign uart_rx = uart_tx_o;
-//
-//assign avr_tx = uart0_txd;
-//assign uart0_rxd = avr_rx;
-//
-assign uart0_rxd = uart_tx_o;
-assign uart_rx_i = uart0_txd;
-
+assign uart_rx_i = uart_tx;
+assign uart_rx = uart_tx_o;
 /* verilator lint_off PINMISSING */
 uart tb_uart
-     (
-         .clk(clk),
-         .rst(!reset_n),
-         .input_axis_tdata(uart_tx_data_i),
-         .input_axis_tvalid(uart_tx_valid_i),
-         .input_axis_tready(uart_tx_ready_o),
+(
+    .clk(clk),
+    .rst(!reset_n),
+    .input_axis_tdata(uart_tx_data_i),
+    .input_axis_tvalid(uart_tx_valid_i),
+    .input_axis_tready(uart_tx_ready_o),
 
-         .output_axis_tdata(uart_rx_data_o),
-         .output_axis_tvalid(uart_rx_valid_o),
-         .output_axis_tready(uart_rx_ready_i),
-         .rxd(uart_rx_i),
-         .txd(uart_tx_o),
-         .prescale(uart_prescale)
-     );
+    .output_axis_tdata(uart_rx_data_o),
+    .output_axis_tvalid(uart_rx_valid_o),
+    .output_axis_tready(uart_rx_ready_i),
+    .rxd(uart_rx_i),
+    .txd(uart_tx_o),
+    .prescale(uart_prescale)
+);
 /* verilator lint_on PINMISSING */
+
 endmodule
 

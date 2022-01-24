@@ -4,7 +4,7 @@
 /* (c) 2019-2020; Andras Pal <apal@szofi.net>				     */
 /*****************************************************************************/
 
-module uart_tx (input clk, input [7:0] prescaler, input [7:0] tx_in, input strobe, output reg txd, output busy, output prefetch);
+module avr_io_uart_tx (input clk, input [7:0] prescaler, input [7:0] tx_in, input strobe, output reg txd, output busy, output prefetch);
 
 parameter TX_STATE_IDLE = 0;
 parameter TX_STATE_TRANSMIT = 1;
@@ -65,7 +65,7 @@ endmodule
 
     /*****************************************************************************/
 
-    module uart_rx (input clk, input [7:0] prescaler, input rxd, input reset, output [7:0] rx_out, output reg avail);
+    module avr_io_uart_rx (input clk, input [7:0] prescaler, input rxd, input reset, output [7:0] rx_out, output reg avail);
 
 parameter STATE_IDLE = 0;
 parameter STATE_STARTBIT = 2;
@@ -191,7 +191,7 @@ end
 /* TX */
 
 
-uart_tx tx0 (clk, UBRR, UDR_TX, tx0_non_empty, tx0_txd, tx0_busy, tx0_prefetch);
+avr_io_uart_tx tx0 (clk, UBRR, UDR_TX, tx0_non_empty, tx0_txd, tx0_busy, tx0_prefetch);
 
 /* transmitter state changes: */
 always @(posedge clk) begin
@@ -209,7 +209,7 @@ assign	txd = tx0_txd | (~tx0_busy);
 wire [7:0] rx0_data;
 wire	rx0_avail;
 
-uart_rx rx0 (clk, UBRR, rxd, rx0_reset, rx0_data, rx0_avail);
+avr_io_uart_rx rx0 (clk, UBRR, rxd, rx0_reset, rx0_data, rx0_avail);
 
 /* receiver state changes: */
 always @(posedge clk) begin

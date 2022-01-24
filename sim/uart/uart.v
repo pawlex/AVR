@@ -19,7 +19,7 @@ THE SOFTWARE.
 
 // Language: Verilog 2001
 // .prescale(125000000/(9600*8))
-`timescale 1ns / 1ps
+`timescale 1ns / 1ns
 
 /*
  * AXI4-Stream UART
