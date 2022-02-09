@@ -5,10 +5,10 @@
 .set	VECTOR_SIZE,	2
 .set	VECTOR_WIDTH,	2
 
-.set	VECTOR_NUM,	1<<VECTOR_WIDTH
+.set	VECTOR_NUM,	    1<<VECTOR_WIDTH
 .set	AVR_REG_SIZE,	0x0020
 .set	AVR_IO_SIZE,	0x0040
-.set	RAM_SIZE, 	0x0200
+.set	RAM_SIZE, 	    0x0800
 
 ;=============================================================================;
 
