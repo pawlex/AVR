@@ -11,7 +11,10 @@
 - UART
 ### SIMULATION MODELS
 - Icarus
+- - TestBench (Verilog)
 - Verilator
+- - TestBench (Verilog)
+- - Verilator Interface (C++)
 ### SOFTWARE FRAMEWORK
 - C/C++
 - ASM
