@@ -68,4 +68,4 @@ sim: clean main.mem
 #	$(PROGMEM) --depth $(PMEM_DEPTH) --name flash main.bin > main.v
 #
 clean:
-	rm -f $(TARGETS) *.o *.elf main.mem *.disasm *.hex *.bin
+	rm -f $(TARGETS) *.o *.elf main.mem *.disasm *.hex *.bin *.instr logs/*.vcd

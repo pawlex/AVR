@@ -11,9 +11,11 @@ input reset_n;
 
 always @(posedge clk or negedge reset_n)
 begin
-    if(!reset_n) begin
+    if (!reset_n)
+    begin
         // DO SOME RESET STUFF
-    end else
+    end
+    else
     begin
         // DO SOME OTHER STUFF
     end

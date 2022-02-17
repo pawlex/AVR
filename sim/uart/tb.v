@@ -1,28 +1,34 @@
 `timescale 1ns/100ps
 
 module tb();
-reg reset_n=0;
-reg clk=0;
+reg reset_n = 0;
+reg clk = 0;
 
-initial begin
-    forever #10 clk = ~clk;
+initial
+begin
+    forever
+        #10 clk = ~clk;
 end
 
-initial begin
+initial
+begin
     reset_n = 0;
     #10;
     reset_n = 1;
     wait(!reset_n) #100 $finish;
 end
 
-initial begin
+initial
+begin
     $dumpfile ("dump.vcd");
     $dumpvars();
-    repeat(100000) @(posedge clk); $finish; // max 100k clocks
+    repeat(100000) @(posedge clk);
+    $finish; // max 100k clocks
 end
 
-initial begin
-    tx_data  <= 0;
+initial
+begin
+    tx_data <= 0;
     rx_ready <= 0;
     tx_valid <= 0;
     wait(reset_n);
@@ -65,9 +71,9 @@ end
 //end
 
 wire loopback;
-reg  [7:0] tx_data;
-wire [7:0] rx_data;
-reg  tx_valid, rx_ready;
+reg [7: 0] tx_data;
+wire [7: 0] rx_data;
+reg tx_valid, rx_ready;
 wire rx_valid, tx_ready;
 
 uart uart

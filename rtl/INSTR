@@ -1,0 +1,633 @@
+// 16'b10q0_qq0d_dddd_0qqq  LD Rd, Z+q
+// 16'b10q0_qq0d_dddd_1qqq  LD Rd, Y+q
+// 16'b10q0_qq1d_dddd_0qqq  ST Z+q, Rd
+// 16'b10q0_qq1d_dddd_1qqq  ST Y+q, Rd
+// 16'b1001_000d_dddd_0001  LD Rd, Z++
+// 16'b1001_000d_dddd_1001  LD Rd, Y++
+// 16'b1001_001d_dddd_0001  ST Z++, Rd
+// 16'b1001_001d_dddd_1001  ST Y++, Rd
+// 16'b1001_000d_dddd_0010  LD Rd, --Z
+// 16'b1001_000d_dddd_1010  LD Rd, --Y
+// 16'b1001_001d_dddd_0010  ST --Z, Rd
+// 16'b1001_001d_dddd_1010  ST --Y, Rd
+// 16'b1001_000d_dddd_1100  LD Rd, X
+// 16'b1001_000d_dddd_1101  LD Rd, X++
+// 16'b1001_000d_dddd_1110  LD Rd, --X
+// 16'b1001_001d_dddd_1100  ST X, Rd
+// 16'b1001_001d_dddd_1101  ST X++, Rd
+// 16'b1001_001d_dddd_1110  ST --X, Rd
+// 16'b1001_000d_dddd_1111  POP Rd == LD Rd, ++SP
+// 16'b1001_001d_dddd_1111  PUSH Rd == ST SP--, Rd
+
+// 16'b1001_000d_dddd_1101              LD Rd, X++
+// 16'b1001_000d_dddd_1110              LD Rd, --X
+// 16'b1001_001d_dddd_1101              ST X++, Rd
+// 16'b1001_001d_dddd_1110              ST --X, Rd
+
+// 16'b1001_000d_dddd_1001              LD Rd, Y++
+// 16'b1001_000d_dddd_1010              LD Rd, --Y
+// 16'b1001_001d_dddd_1001              ST Y++, Rd
+// 16'b1001_001d_dddd_1010              ST --Y, Rd
+
+// 16'b1001_000d_dddd_0001              LD Rd, Z++
+// 16'b1001_000d_dddd_0010              LD Rd, --Z
+// 16'b1001_001d_dddd_0001              ST Z++, Rd
+// 16'b1001_001d_dddd_0010              ST --Z, Rd
+
+// 16'b1001_000d_dddd_01x1  LPM Rd, Z++
+
+// INSTR[15:10] == 6'b100100
+// X increased/decreased: INSTR[3:2] == 2'b11
+// Y increased/decreased: INSTR[3:2] == 2'b10
+// Z increased/decreased: INSTR[3:2] == 2'b00
+// Z increased    INSTR[3:2] == 2'b01
+--
+                16'b10x0_xx0x_xxxx_xxxx:
+                begin
+                    /* LD Rd, Z+q */
+                    /* LD Rd, Y+q */
+                    d_addr = (~INSTR[3] ? RZ : RY) + q;
+                    d_read = 1;
+                end
+--
+                16'b10x0_xx1x_xxxx_xxxx:
+                begin
+                    /* ST Z+q, Rd */
+                    /* ST Y+q, Rd */
+                    d_addr = (~INSTR[3] ? RZ : RY) + q;
+                    d_out = GPR_Rd;
+                    d_write = 1;
+--
+                16'b1001_000x_xxxx_x001:
+                begin
+                    /* LD Rd, Z++ */
+                    /* LD Rd, Y++ */
+                    d_addr = (~INSTR[3] ? RZ : RY);
+                    d_read = 1;
+                end
+--
+                16'b1001_001x_xxxx_x001:
+                begin
+                    /* ST Z++, Rd */
+                    /* ST Y++, Rd */
+                    d_addr = (~INSTR[3] ? RZ : RY);
+                    d_out = GPR_Rd;
+                    d_write = 1;
+--
+                16'b1001_000x_xxxx_x010:
+                begin
+                    /* LD Rd, --Z */
+                    /* LD Rd, --Y */
+                    d_addr = (~INSTR[3] ? RZ : RY) - 1;
+                    d_read = 1;
+                end
+--
+                16'b1001_001x_xxxx_x010:
+                begin
+                    /* ST --Z, Rd */
+                    /* ST --Y, Rd */
+                    d_addr = (~INSTR[3] ? RZ : RY) - 1;
+                    d_out = GPR_Rd;
+                    d_write = 1;
+--
+                16'b1001_000x_xxxx_110x:
+                begin
+                    /* LD Rd, X */
+                    /* LD Rd, X++ */
+                    d_addr = RX;
+                    d_read = 1;
+                end
+--
+                16'b1001_000x_xxxx_1110:
+                begin
+                    /* LD Rd, --X */
+                    d_addr = RX - 1;
+                    d_read = 1;
+                end
+
+                16'b1001_001x_xxxx_110x:
+                begin
+                    /* ST X, Rd */
+                    /* ST X++, Rd */
+                    d_addr = RX;
+                    d_out = GPR_Rd;
+                    d_write = 1;
+--
+                16'b1001_001x_xxxx_1110:
+                begin
+                    /* ST --X, Rd */
+                    d_addr = RX - 1;
+                    d_out = GPR_Rd;
+                    d_write = 1;
+                end
+--
+                16'b1001_000x_xxxx_1111:
+                begin
+                    /* POP Rd -- LD Rd, ++SP */
+                    d_addr = SP + 1;
+                    d_read = 1;
+                end
+
+                16'b1001_001x_xxxx_1111:
+                begin
+                    /* PUSH Rd -- ST SP--, Rd */
+                    d_addr = SP;
+                    d_out = GPR_Rd;
+                    d_write = 1;
+                end
+--
+                16'b1101_xxxx_xxxx_xxxx,
+                16'b1001_0101_0000_1001:
+                begin
+                    /* RCALL */
+                    /* ICALL */
+                    d_addr = SP;
+                    d_out = pc_full[15: 8];
+                    d_write = 1;
+--
+                16'b1001_0101_000x_1000:
+                begin
+                    /* RET, RETI */
+                    d_addr = SP + 1;
+                    d_read = 1;
+                end
+
+--
+                16'b1001_000x_xxxx_0000:
+                begin
+                    /* LDS Rd, 0xXXXX */
+                    d_addr = INSTR;
+                    d_read = 1;
+                end
+
+                16'b1001_001x_xxxx_0000:
+                begin
+                    /* STS 0xXXXX, Rd */
+                    d_addr = INSTR;
+                    d_out = GPR[Rd_prev];
+                    d_write = 1;
+                end
+--
+                16'b1001_010x_xxxx_111x:
+                begin
+                    /* CALL k */
+                    d_addr = SP;
+                    d_out = pc_full[15: 8];
+                    d_write = 1;
+                end
+--
+// 16'b1011_0aad_dddd_aaaa:  /* IN */
+// 16'b1011_1aad_dddd_aaaa: /* OUT */
+// 16'b1001_1000_aaaa_abbb:  /* CBI */
+// 16'b1001_1010_aaaa_abbb:  /* SBI */
+// 16'b1001_1001_aaaa_abbb: /* SBIC */
+// 16'b1001_1011_aaaa_abbb: /* SBIS */
+
+reg [7: 0] Rio;
+
+wire [5: 0] a = INSTR[13] ? {INSTR[10 : 9], INSTR[3 : 0]} : {1'b0, INSTR[7 : 3]};
+wire io_act = (INSTR[15: 12] == 4'b1011) & (state == STATE_NORMAL);
+assign io_a = (state == STATE_IO_BIT ? {1'b0, PREVI[7 : 3]} : a);
+--
+                16'b0000_0001_xxxx_xxxx:
+                begin
+                    R = GPR[2 * RR16 + 0];
+                    R_high = GPR[2 * RR16 + 1];
+                    pc_next = PC + 1;
+                    ISMOVW = 1;
+                end
+--
+                16'b1001_11xx_xxxx_xxxx,
+                16'b0000_001x_xxxx_xxxx:
+                begin
+                    /* MUL */
+                    /* MULS */
+                    /* MULSU */
+                    /* FMUL */
+                    /* FMULS */
+--
+                16'b000x_10xx_xxxx_xxxx,    /* subtract */
+                16'b000x_01xx_xxxx_xxxx:    /* compare  */
+                begin
+                    /* SUB - SBC / CP - CPC */
+                    {nC, R} = GPR_Rd - GPR_Rr - (~INSTR[12] & C);
+                    nH = (~GPR_Rd[3] & GPR_Rr[3]) | (GPR_Rr[3] & R[3]) | (R[3] & ~GPR_Rd[3]);
+                    nV = (GPR_Rd[7] & ~GPR_Rr[7] & ~R[7]) | (~GPR_Rd[7] & GPR_Rr[7] & R[7]);
+                    update_nsz = 1;
+--
+                16'b000x_11xx_xxxx_xxxx:
+                begin
+                    /* ADD - ADC */
+                    {nC, R} = GPR_Rd + GPR_Rr + (INSTR[12] & C);
+                    nH = (GPR_Rd[3] & GPR_Rr[3]) | (GPR_Rr[3] & ~R[3]) | (~R[3] & GPR_Rd[3]);
+                    nV = (GPR_Rd[7] & GPR_Rr[7] & ~R[7]) | (~GPR_Rd[7] & ~GPR_Rr[7] & R[7]);
+                    update_nsz = 1;
+--
+                16'b010x_xxxx_xxxx_xxxx,    /* subtract */
+                16'b0011_xxxx_xxxx_xxxx:    /* compare  */
+                begin
+                    /* SUBI - SBCI / CPI */
+                    {nC, R} = GPR_Rd - K - (~INSTR[12] & C);
+                    nH = (~GPR_Rd[3] & K[3]) | (K[3] & R[3]) | (R[3] & ~GPR_Rd[3]);
+                    nV = (GPR_Rd[7] & ~K[7] & ~R[7]) | (~GPR_Rd[7] & K[7] & R[7]);
+                    update_nsz = 1;
+--
+                16'b0111_xxxx_xxxx_xxxx:
+                begin
+                    /* ANDI Rd, K; */
+                    R = GPR_Rd & K;
+                    nV = 1'b0;
+                    update_nsz = 1;
+                    writeback = WRITEBACK_GPR;
+--
+                16'b0110_xxxx_xxxx_xxxx:
+                begin
+                    /* ORI Rd, K; */
+                    R = GPR_Rd | K;
+                    nV = 1'b0;
+                    update_nsz = 1;
+                    writeback = WRITEBACK_GPR;
+--
+                16'b0010_00xx_xxxx_xxxx:
+                begin
+                    /* AND */
+                    R = GPR_Rd & GPR_Rr;
+                    nV = 1'b0;
+                    update_nsz = 1;
+                    writeback = WRITEBACK_GPR;
+--
+                16'b0010_01xx_xxxx_xxxx:
+                begin
+                    /* EOR */
+                    R = GPR_Rd ^ GPR_Rr;
+                    nV = 1'b0;
+                    update_nsz = 1;
+                    writeback = WRITEBACK_GPR;
+--
+                16'b0010_10xx_xxxx_xxxx:
+                begin
+                    /* OR */
+                    R = GPR_Rd | GPR_Rr;
+                    nV = 1'b0;
+                    update_nsz = 1;
+                    writeback = WRITEBACK_GPR;
+--
+                16'b0010_11xx_xxxx_xxxx:
+                begin
+                    /* MOV */
+                    R = GPR_Rr;
+                    writeback = WRITEBACK_GPR;
+                    pc_next = PC + 1;
+                end
+--
+                16'b1001_010x_xxxx_0000:
+                begin
+                    /* COM */
+                    R = ~GPR_Rd;
+                    nV = 1'b0;
+                    nC = 1'b1;
+                    update_nsz = 1;
+--
+                16'b1001_010x_xxxx_0001:
+                begin
+                    /* NEG */
+                    {nC, R} = 8'h00 - GPR_Rd;
+                    nH = R[3] | GPR_Rd[3];
+                    nV = (R == 8'h80);
+                    update_nsz = 1;
+--
+                16'b1001_010x_xxxx_0011:
+                begin
+                    /* INC */
+                    R = GPR_Rd + 8'd1;
+                    nV = (R == 8'h80);
+                    update_nsz = 1;
+                    writeback = WRITEBACK_GPR;
+--
+                16'b1001_010x_xxxx_1010:
+                begin
+                    /* DEC */
+                    R = GPR_Rd - 8'd1;
+                    nV = (R == 8'h7f);
+                    update_nsz = 1;
+                    writeback = WRITEBACK_GPR;
+--
+                16'b1001_010x_xxxx_011x:
+                begin
+                    /* LSR - ROR */
+                    R = {INSTR[0] & C, GPR_Rd[7: 1]};
+                    nC = GPR_Rd[0];
+                    nV = R[7] ^ GPR_Rd[0];
+                    update_nsz = 1;
+--
+                16'b1001_010x_xxxx_0101:
+                begin
+                    /* ASR */
+                    R = {GPR_Rd[7], GPR_Rd[7: 1]};
+                    nC = GPR_Rd[0];
+                    nV = R[7] ^ GPR_Rd[0];
+                    update_nsz = 1;
+--
+                16'b1001_010x_xxxx_0010:
+                begin
+                    /* SWAP */
+                    R = {GPR_Rd[3: 0], GPR_Rd[7: 4]};
+                    writeback = WRITEBACK_GPR;
+                    pc_next = PC + 1;
+                end
+--
+                16'b1001_0100_xxxx_1000:
+                begin
+                    /* BSET - BCLR */
+                    case (INSTR[7: 4])
+                        4'b0000:
+                            nC = 1'b1;
+                        4'b0001:
+--
+                16'b1001_011x_xxxx_xxxx:
+                begin
+                    /* SBIW */
+                    /* ADIW */
+                    if (INSTR[8])
+                    begin /* SBIW */
+                        {nC, R} = GPR[24 + 2 * Rd16] - K16;
+--
+                16'b1001_00xx_xxxx_0000:
+                begin
+                    /* LDS Rd, 0xXXXX */
+                    /* STS 0xXXXX, Rd */
+                    pc_next = PC + 1;
+                    next_state = STATE_TWOWORD;
+                end
+--
+                16'b1001_010x_xxxx_11xx:
+                begin
+                    /* JMP k */
+                    /* CALL k */
+                    pc_next = PC + 1;
+                    next_state = STATE_TWOWORD;
+                end
+--
+                16'b10x0_xx0x_xxxx_xxxx:
+                begin
+                    /* LD Rd, Z+q; */
+                    /* LD Rd, Y+q; */
+                    next_state = STATE_LD;
+                end
+
+                16'b10x0_xx1x_xxxx_xxxx:
+                begin
+                    /* ST Z+q, Rd */
+                    /* ST Y+q, Rd */
+                    pc_next = PC + 1;
+                end
+
+                16'b1001_000x_xxxx_x001:
+                begin
+                    /* LD Rd, Z++ */
+                    /* LD Rd, Y++ */
+                    next_state = STATE_LD;
+                    /* save dest register for the next cycle: */
+                    writeback = WRITEBACK_ZY;
+--
+                16'b1001_001x_xxxx_x001:
+                begin
+                    /* ST Z++, Rd */
+                    /* ST Y++, Rd */
+                    pc_next = PC + 1;
+                    writeback = WRITEBACK_ZY;
+                end
+--
+                16'b1001_000x_xxxx_x010:
+                begin
+                    /* LD Rd, --Z */
+                    /* LD Rd, --Y */
+                    next_state = STATE_LD;
+                    /* save dest register for the next cycle: */
+                    writeback = WRITEBACK_ZY;
+--
+                16'b1001_001x_xxxx_x010:
+                begin
+                    /* ST --Z, Rd */
+                    /* ST --Y, Rd */
+                    pc_next = PC + 1;
+                    writeback = WRITEBACK_ZY;
+                end
+--
+                16'b1001_000x_xxxx_1100:
+                begin
+                    /* LD Rd, X */
+                    next_state = STATE_LD;
+                end
+
+                16'b1001_001x_xxxx_1100:
+                begin
+                    /* ST X, Rd */
+                    pc_next = PC + 1;
+                end
+
+                16'b1001_000x_xxxx_1101:
+                begin
+                    /* LD Rd, X++ */
+                    writeback = WRITEBACK_X;
+                    next_state = STATE_LD;
+                end
+
+                16'b1001_001x_xxxx_1101:
+                begin
+                    /* ST X++, Rd */
+                    writeback = WRITEBACK_X;
+                    pc_next = PC + 1;
+                end
+
+                16'b1001_000x_xxxx_1110:
+                begin
+                    /* LD Rd, --X */
+                    writeback = WRITEBACK_X;
+                    next_state = STATE_LD;
+                end
+
+                16'b1001_001x_xxxx_1110:
+                begin
+                    /* ST --X, Rd */
+                    writeback = WRITEBACK_X;
+                    pc_next = PC + 1;
+                end
+
+                16'b1001_000x_xxxx_1111:
+                begin
+                    /* POP Rd */ /* LD Rd, ++SP */
+                    sp_next = SP + 1;
+                    sp_update = 1;
+                    next_state = STATE_LD;
+                end
+--
+                16'b1001_001x_xxxx_1111:
+                begin
+                    /* PUSH Rd */ /* ST SP--, Rd */
+                    sp_next = SP - 1;
+                    sp_update = 1;
+                    next_state = STATE_STALL;
+                end
+--
+                16'b1100_xxxx_xxxx_xxxx:
+                begin
+                    /* RJMP */
+                    next_state = STATE_STALL;
+                    pc_next = PC + { {4{INSTR[11]}}, INSTR[11: 0] };
+                end
+
+                16'b1001_0100_0000_1001:
+                begin
+                    /* IJMP */
+                    next_state = STATE_STALL;
+                    pc_next = RZ;
+                end
+
+                16'b1101_xxxx_xxxx_xxxx:
+                begin
+                    /* RCALL */
+                    pc_call_next = pc_full + { {4{INSTR[11]}}, INSTR[11: 0] };
+                    sp_next = SP - 1;
+                    sp_update = 1;
+                    next_state = STATE_CALL;
+--
+                16'b1001_0101_0000_1001:
+                begin
+                    /* ICALL */
+                    pc_call_next = RZ;
+                    sp_next = SP - 1;
+                    sp_update = 1;
+                    next_state = STATE_CALL;
+--
+                16'b1001_0101_0000_1000,     /* INSTR: 0x9508 */
+                16'b1001_0101_0001_1000:
+                begin /* INSTR: 0x9518 */
+                    /* RET */
+                    /* RETI */
+
+                    if ( is_tail_reti )
+                    begin
+--
+                16'b1001_0101_110x_1000:
+                begin
+                    /* LPM */
+                    /* ELPM */
+                    pc_call_next = PC;
+                    pc_next = RZ[pmem_width: 1];
+                    next_state = STATE_LPM;
+--
+                //      16'b1001_0101_111x_1000: begin
+                //   /* SPM Z */
+                //   /* SPM Z+ */
+                //   pc_call_next = PC;
+                //   pc_next = RZ[pmem_width:1];
+                //   next_state = STATE_LPM;
+                //   end
+--
+                16'b1001_000x_xxxx_01xx:
+                begin
+                    /* LPM Rd, Z */
+                    /* LPM Rd, Z++ */
+                    /* ELPM Rd, Z */
+                    /* ELPM Rd, Z++ */
+                    pc_call_next = PC;
+--
+                16'b1111_0xxx_xxxx_xxxx:
+                begin
+                    /* BRxS - BRxC */
+                    if (SREG[b] ^ INSTR[10])
+                    begin
+                        next_state = STATE_STALL;
+                        pc_next = PC + { {9{INSTR[9]}}, INSTR[9: 3] };
+--
+                16'b1111_11xx_xxxx_0xxx:
+                begin
+                    /* SBRC */
+                    /* SBRS */
+                    if (GPR_Rd_b == INSTR[9])
+                    begin
+                        next_state = STATE_SKIP;
+--
+                16'b1001_10x0_xxxx_xxxx:
+                begin
+                    /* CBI */
+                    /* SBI */
+                    next_state = STATE_IO_BIT;
+                end
+
+                16'b1001_10x1_xxxx_xxxx:
+                begin
+                    /* SBIC */
+                    /* SBIS */
+                    if (Rin[b] == INSTR[9])
+                    begin
+                        next_state = STATE_SKIP;
+--
+                16'b0001_00xx_xxxx_xxxx:
+                begin
+                    /* CPSE */
+                    if (GPR_Rd == GPR_Rr)
+                    begin
+                        next_state = STATE_SKIP;
+                    end
+--
+                16'b1110_xxxx_xxxx_xxxx:
+                begin
+                    /* LDI */
+                    R = K;
+                    writeback = WRITEBACK_GPR;
+                    pc_next = PC + 1;
+                end
+--
+                16'b1111_10xx_xxxx_0xxx:
+                begin
+                    /* BST */
+                    /* BLD */
+                    if (INSTR[9])
+                    begin /* BST */
+                        nT = GPR_Rd_b;
+--
+                16'b1011_0xxx_xxxx_xxxx:
+                begin
+                    /* IN */
+                    R = Rin;
+                    writeback = WRITEBACK_GPR;
+                    pc_next = PC + 1;
+                end
+--
+                16'b1011_1xxx_xxxx_xxxx:
+                begin
+                    /* OUT */
+                    if (a == 6'b111101)
+                    begin   /* SPL */
+                        sp_next[7: 0] = GPR_Rd;
+                        sp_update = 1;
+--
+                16'b1001_000x_xxxx_0000:
+                begin
+                    /* LDS Rd, 0xXXXX */
+                    next_state = STATE_LD;
+                end
+
+                16'b1001_001x_xxxx_0000:
+                begin
+                    /* STS 0xXXXX, Rd */
+                    pc_next = PC + 1;
+                end
+
+`ifdef AVR_HAVE_22BITPC
+                16'b1001_010x_xxxx_110x:
+                begin
+                    /* JMP K */
+                    next_state = STATE_STALL;
+                    pc_next = INSTR;
+                end
+
+                16'b1001_010x_xxxx_111x:
+                begin
+                    /* CALL K */
+                    pc_call_next = INSTR;
+                    sp_next = SP - 1;
+                    sp_update = 1;
+                    next_state = STATE_CALL;

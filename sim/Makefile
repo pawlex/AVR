@@ -55,9 +55,9 @@ VERILATOR_FLAGS += -Wno-fatal
 
 # Input files for Verilator
 VERILATOR_FLAGS+=--top-module top
-VERILATOR_INPUT = -f input.vc top.cpp top.v
-VERILATOR_INPUT += ../avr_systick.v ../avr_io_out.v ../avr_io_timer.v ../avr_io_uart.v ../avr_core.v
-VERILATOR_INPUT += ../flash.v ../ram.v ../priority_encoder.v
+VERILATOR_INPUT = -f input.vc top.cpp ../rtl/top.v
+VERILATOR_INPUT += ../rtl/avr_systick.v ../rtl/avr_io_out.v ../rtl/avr_io_timer.v ../rtl/avr_io_uart.v ../rtl/avr_core.v
+VERILATOR_INPUT += ../rtl/flash.v ../rtl/ram.v ../rtl/priority_encoder.v
 VERILATOR_INPUT += ./uart/uart.v ./uart/uart_tx.v ./uart/uart_rx.v
 #VERILATOR_INPUT += ../risc16f84_clk2x.v ../uart/uart.v ../uart/uart_tx.v ../uart/uart_rx.v
 ######################################################################

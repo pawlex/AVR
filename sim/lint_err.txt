@@ -1,0 +1,173 @@
+                       ... Use "/* verilator lint_off DECLFILENAME */" and lint_on around source to disable this message.
+%Warning-DEFPARAM: top.v:51: Suggest replace defparam assignment with Verilog 2001 #(.ram_width(...etc...))
+defparam core0_ram.ram_width = dmem_width;
+                             ^
+%Warning-DEFPARAM: top.v:188: Suggest replace defparam assignment with Verilog 2001 #(.pmem_width(...etc...))
+defparam core0.pmem_width = pmem_width;
+                          ^
+%Warning-DEFPARAM: top.v:189: Suggest replace defparam assignment with Verilog 2001 #(.dmem_width(...etc...))
+defparam core0.dmem_width = dmem_width;
+                          ^
+%Warning-DEFPARAM: top.v:190: Suggest replace defparam assignment with Verilog 2001 #(.interrupt(...etc...))
+defparam core0.interrupt  = 1;
+                          ^
+%Warning-DEFPARAM: top.v:191: Suggest replace defparam assignment with Verilog 2001 #(.intr_width(...etc...))
+defparam core0.intr_width = 2;
+                          ^
+%Warning-WIDTH: uart/uart_rx.v:106: Operator SHIFTL expects 32 or 19 bits on the LHS, but LHS's VARREF 'prescale' generates 16 bits.
+                                  : ... In instance top.tb_uart.uart_rx_inst
+                    prescale_reg <= (prescale << 3)-1;
+                                              ^~
+%Warning-WIDTH: uart/uart_rx.v:113: Operator SHIFTL expects 32 or 19 bits on the LHS, but LHS's VARREF 'prescale' generates 16 bits.
+                                  : ... In instance top.tb_uart.uart_rx_inst
+                prescale_reg <= (prescale << 3)-1;
+                                          ^~
+%Warning-WIDTH: uart/uart_rx.v:128: Operator SHIFTL expects 32 or 19 bits on the LHS, but LHS's VARREF 'prescale' generates 16 bits.
+                                  : ... In instance top.tb_uart.uart_rx_inst
+                prescale_reg <= (prescale << 2)-2;
+                                          ^~
+%Warning-WIDTH: uart/uart_tx.v:90: Operator SHIFTL expects 32 or 19 bits on the LHS, but LHS's VARREF 'prescale' generates 16 bits.
+                                 : ... In instance top.tb_uart.uart_tx_inst
+                prescale_reg <= (prescale << 3)-1;
+                                          ^~
+%Warning-WIDTH: uart/uart_tx.v:99: Operator SHIFTL expects 32 or 19 bits on the LHS, but LHS's VARREF 'prescale' generates 16 bits.
+                                 : ... In instance top.tb_uart.uart_tx_inst
+                prescale_reg <= (prescale << 3)-1;
+                                          ^~
+%Warning-WIDTH: uart/uart_tx.v:103: Operator SHIFTL expects 19 bits on the LHS, but LHS's VARREF 'prescale' generates 16 bits.
+                                  : ... In instance top.tb_uart.uart_tx_inst
+                prescale_reg <= (prescale << 3);
+                                          ^~
+%Warning-WIDTH: ../avr_core.v:365: Operator ADD expects 16 bits on the RHS, but RHS's VARREF 'q' generates 6 bits.
+                                 : ... In instance top.core0
+                    d_addr = (~INSTR[3] ? RZ : RY) + q;
+                                                   ^
+%Warning-WIDTH: ../avr_core.v:373: Operator ADD expects 16 bits on the RHS, but RHS's VARREF 'q' generates 6 bits.
+                                 : ... In instance top.core0
+                    d_addr = (~INSTR[3] ? RZ : RY) + q;
+                                                   ^
+%Warning-WIDTH: ../avr_core.v:665: Operator NOT expects 9 bits on the LHS, but LHS's SEL generates 1 bits.
+                                 : ... In instance top.core0
+                    {nC, R} = GPR_Rd - GPR_Rr - (~INSTR[12] & C);
+                                                 ^
+%Warning-WIDTH: ../avr_core.v:665: Operator AND expects 9 bits on the RHS, but RHS's VARREF 'C' generates 1 bits.
+                                 : ... In instance top.core0
+                    {nC, R} = GPR_Rd - GPR_Rr - (~INSTR[12] & C);
+                                                            ^
+%Warning-WIDTH: ../avr_core.v:680: Operator AND expects 9 bits on the LHS, but LHS's SEL generates 1 bits.
+                                 : ... In instance top.core0
+                    {nC, R} = GPR_Rd + GPR_Rr + (INSTR[12] & C);
+                                                           ^
+%Warning-WIDTH: ../avr_core.v:680: Operator AND expects 9 bits on the RHS, but RHS's VARREF 'C' generates 1 bits.
+                                 : ... In instance top.core0
+                    {nC, R} = GPR_Rd + GPR_Rr + (INSTR[12] & C);
+                                                           ^
+%Warning-WIDTH: ../avr_core.v:692: Operator NOT expects 9 bits on the LHS, but LHS's SEL generates 1 bits.
+                                 : ... In instance top.core0
+                    {nC, R} = GPR_Rd - K - (~INSTR[12] & C);
+                                            ^
+%Warning-WIDTH: ../avr_core.v:692: Operator AND expects 9 bits on the RHS, but RHS's VARREF 'C' generates 1 bits.
+                                 : ... In instance top.core0
+                    {nC, R} = GPR_Rd - K - (~INSTR[12] & C);
+                                                       ^
+%Warning-WIDTH: ../avr_core.v:880: Operator SUB expects 9 bits on the RHS, but RHS's VARREF 'K16' generates 6 bits.
+                                 : ... In instance top.core0
+                        {nC, R} = GPR[24 + 2 * Rd16] - K16;
+                                                     ^
+%Warning-WIDTH: ../avr_core.v:884: Operator ADD expects 9 bits on the RHS, but RHS's VARREF 'K16' generates 6 bits.
+                                 : ... In instance top.core0
+                        {nC, R} = GPR[24 + 2 * Rd16] + K16;
+                                                     ^
+%Warning-WIDTH: ../avr_core.v:1018: Operator ADD expects 16 bits on the LHS, but LHS's VARREF 'PC' generates 10 bits.
+                                  : ... In instance top.core0
+                    pc_next = PC + { {4{INSTR[11]}}, INSTR[11: 0] };
+                                 ^
+%Warning-WIDTH: ../avr_core.v:1018: Operator ASSIGN expects 10 bits on the Assign RHS, but Assign RHS's ADD generates 16 bits.
+                                  : ... In instance top.core0
+                    pc_next = PC + { {4{INSTR[11]}}, INSTR[11: 0] };
+                            ^
+%Warning-WIDTH: ../avr_core.v:1025: Operator ASSIGN expects 10 bits on the Assign RHS, but Assign RHS's VARREF 'RZ' generates 16 bits.
+                                  : ... In instance top.core0
+                    pc_next = RZ;
+                            ^
+%Warning-WIDTH: ../avr_core.v:1057: Operator ASSIGN expects 10 bits on the Assign RHS, but Assign RHS's VARREF 'ivect' generates 2 bits.
+                                  : ... In instance top.core0
+                        pc_next = ivect;
+                                ^
+%Warning-WIDTH: ../avr_core.v:1077: Operator ASSIGN expects 16 bits on the Assign RHS, but Assign RHS's VARREF 'PC' generates 10 bits.
+                                  : ... In instance top.core0
+                    pc_call_next = PC;
+                                 ^
+%Warning-WIDTH: ../avr_core.v:1099: Operator ASSIGN expects 16 bits on the Assign RHS, but Assign RHS's VARREF 'PC' generates 10 bits.
+                                  : ... In instance top.core0
+                    pc_call_next = PC;
+                                 ^
+%Warning-WIDTH: ../avr_core.v:1113: Operator ADD expects 16 bits on the LHS, but LHS's VARREF 'PC' generates 10 bits.
+                                  : ... In instance top.core0
+                        pc_next = PC + { {9{INSTR[9]}}, INSTR[9: 3] };
+                                     ^
+%Warning-WIDTH: ../avr_core.v:1113: Operator ASSIGN expects 10 bits on the Assign RHS, but Assign RHS's ADD generates 16 bits.
+                                  : ... In instance top.core0
+                        pc_next = PC + { {9{INSTR[9]}}, INSTR[9: 3] };
+                                ^
+%Warning-WIDTH: ../avr_core.v:1257: Operator ASSIGN expects 16 bits on the Assign RHS, but Assign RHS's VARREF 'ivect' generates 2 bits.
+                                  : ... In instance top.core0
+                pc_call_next = ivect;
+                             ^
+%Warning-WIDTH: ../avr_core.v:1290: Operator ASSIGN expects 10 bits on the Assign RHS, but Assign RHS's VARREF 'INSTR' generates 16 bits.
+                                  : ... In instance top.core0
+                    pc_next = INSTR;
+                            ^
+%Warning-WIDTH: ../avr_core.v:1327: Operator ASSIGN expects 10 bits on the Assign RHS, but Assign RHS's VARREF 'pc_call' generates 16 bits.
+                                  : ... In instance top.core0
+            pc_next = pc_call;
+                    ^
+%Warning-WIDTH: ../avr_core.v:1341: Operator ASSIGN expects 10 bits on the Assign RHS, but Assign RHS's REPLICATE generates 16 bits.
+                                  : ... In instance top.core0
+            pc_next = { dmem_di, pc_call[7: 0] };
+                    ^
+%Warning-WIDTH: ../avr_core.v:1356: Operator ASSIGN expects 10 bits on the Assign RHS, but Assign RHS's VARREF 'pc_call' generates 16 bits.
+                                  : ... In instance top.core0
+            pc_next = pc_call;
+                    ^
+%Warning-WIDTH: ../avr_core.v:1371: Operator SUB expects 9 bits on the RHS, but RHS's VARREF 'C' generates 1 bits.
+                                  : ... In instance top.core0
+                {nC, R_high} = GPR[24 + 2 * Rp16 + 1] - C;
+                                                      ^
+%Warning-WIDTH: ../avr_core.v:1377: Operator ADD expects 9 bits on the RHS, but RHS's VARREF 'C' generates 1 bits.
+                                  : ... In instance top.core0
+                {nC, R_high} = GPR[24 + 2 * Rp16 + 1] + C;
+                                                      ^
+%Warning-WIDTH: ../avr_io_timer.v:97: Operator ASSIGNDLY expects 4 bits on the Assign RHS, but Assign RHS's REPLICATE generates 3 bits.
+                                    : ... In instance top.timer0
+        pre_prev <= { prescaler[11], prescaler[7], prescaler[3] };
+                 ^~
+%Warning-WIDTH: ../avr_io_timer.v:98: Operator ADD expects 17 bits on the RHS, but RHS's VARREF 'increment' generates 1 bits.
+                                    : ... In instance top.timer0
+        { overflow, TCNT } <= { o, 16'd0 } | ( { o, TCNT } + increment );
+                                                           ^
+%Warning-CASEINCOMPLETE: ../avr_io_uart.v:240: Case values incompletely covered (example pattern 0x0)
+        case (io_a)
+        ^~~~
+%Warning-CASEINCOMPLETE: ../avr_core.v:359: Case values incompletely covered (example pattern 0x0)
+            casez (INSTR)
+            ^~~~~
+%Warning-CASEINCOMPLETE: ../avr_core.v:489: Case values incompletely covered (example pattern 0x0)
+            casez (PREVI)
+            ^~~~~
+%Warning-CASEINCOMPLETE: ../avr_core.v:354: Case values incompletely covered (example pattern 0x0)
+    case (state)
+    ^~~~
+%Warning-CASEINCOMPLETE: ../avr_core.v:628: Case values incompletely covered (example pattern 0xe)
+    case (state)
+    ^~~~
+%Warning-CASEINCOMPLETE: ../avr_core.v:1494: Case values incompletely covered (example pattern 0x0)
+                case (writeback)
+                ^~~~
+%Warning-SYNCASYNCNET: top.v:6: Signal flopped as both synchronous and async: 'rst'
+                       uart/uart_tx.v:74: ... Location of async usage
+    if (rst) begin
+        ^~~
+                       ../avr_core.v:591: ... Location of sync usage
+    if (rst)
+<<EOF

@@ -29,51 +29,51 @@ module uart #
            parameter DATA_WIDTH = 8
        )
        (
-           input  wire                   clk,
-           input  wire                   rst,
+           input wire clk,
+           input wire rst,
 
            /*
             * AXI input
             */
-           input  wire [DATA_WIDTH-1:0]  input_axis_tdata,
-           input  wire                   input_axis_tvalid,
-           output wire                   input_axis_tready,
+           input wire [DATA_WIDTH - 1: 0] input_axis_tdata,
+           input wire input_axis_tvalid,
+           output wire input_axis_tready,
 
            /*
             * AXI output
             */
-           output wire [DATA_WIDTH-1:0]  output_axis_tdata,
-           output wire                   output_axis_tvalid,
-           input  wire                   output_axis_tready,
+           output wire [DATA_WIDTH - 1: 0] output_axis_tdata,
+           output wire output_axis_tvalid,
+           input wire output_axis_tready,
            /*
             * UART interface
             */
-           input  wire                   rxd,
-           output wire                   txd,
+           input wire rxd,
+           output wire txd,
 
            /*
             * Status
             */
-           output wire                   tx_busy,
-           output wire                   rx_busy,
-           output wire                   rx_overrun_error,
-           output wire                   rx_frame_error,
+           output wire tx_busy,
+           output wire rx_busy,
+           output wire rx_overrun_error,
+           output wire rx_frame_error,
 
            /*
             * Configuration
             */
-           input  wire [15:0]            prescale
+           input wire [15: 0] prescale
 
        );
 
 
-       `ifdef SIMULATION
+`ifdef SIMULATION
 wire tx_ready, tx_valid, rx_ready, rx_valid;
 assign tx_valid = input_axis_tvalid;
 assign tx_ready = input_axis_tready;
 assign rx_valid = output_axis_tvalid;
 assign rx_ready = output_axis_tready;
-       `endif
+`endif
 
 
 uart_tx #(

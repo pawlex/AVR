@@ -65,7 +65,5 @@ static int uart_putchar(char c, FILE *stream);
 
 static inline void usleep(uint16_t usec);
 static inline void msleep(uint16_t msec);
-static inline void print_uart_rx_buffer(void);
-static inline void print_banner(void);
 
 /* END */

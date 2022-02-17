@@ -1,4 +1,5 @@
 out.vvp
 dump.vcd
 *.bak
-./tmp
+tmp
+sim/obj_dir

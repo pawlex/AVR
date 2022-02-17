@@ -1,9 +1,18 @@
 #!/usr/bin/env bash
-
-SIMFILES=( "./tb.v" "./top.v" )
+SIMFILES=( "rtl/sim.v" )
+SIMFILES=( "rtl/tb.v" "rtl/top.v" )
 SIMFILES+=( "./sim/uart/uart.v" )
 SIMFILES+=( "./sim/uart/uart_rx.v" )
 SIMFILES+=( "./sim/uart/uart_tx.v" )
+
+SIMFILES+=( "rtl/avr_io_uart.v" )
+SIMFILES+=( "rtl/avr_core.v" )
+SIMFILES+=( "rtl/priority_encoder.v" )
+SIMFILES+=( "rtl/flash.v" )
+SIMFILES+=( "rtl/avr_io_out.v" )
+SIMFILES+=( "rtl/ram.v" )
+SIMFILES+=( "rtl/avr_io_timer.v" )
+#SIMFILES+=( "rtl/avr_systick.v" )
 
 IVERILOG='iverilog'
 SIMFLAGS='-DSIMULATION'
@@ -28,7 +37,7 @@ find -name "*.sv" -exec ./bin/vtidy -n {} 1>/dev/null \;
 
 # Execute the simulation.
 echo "########################### BEGIN SIM OUTPUT ###########################"
-vvp out.vvp
+vvp out.vvp | grep -v "will conflict with an escaped identifier." # don't display ram_array dump warning
 echo "###########################  END SIM OUTPUT  ###########################"
 
 # Launch gtkwave (if not already running).
