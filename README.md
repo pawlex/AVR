@@ -1,7 +1,7 @@
-# AVR (ATMEGA328p) verilog model with UART Simulation model and toolchain.
-## Using verilator, icarus and gtkwave
+# AVR (ATMEGA328p) 
+## Verilog model with UART Simulation model and toolchain using verilator, icarus and gtkwave
 
-## SKEL
+### SKEL
 
 ### CPU MODEL
 - CORE
