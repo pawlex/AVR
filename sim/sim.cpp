@@ -1,7 +1,8 @@
-// DESCRIPTION: Verilator: Verilog example module
-//
-// This file ONLY is placed into the Public Domain, for any use,
-// without warranty, 2017 by Wilson Snyder.
+// DESCRIPTION: Verilator Main TB for AVR project
+// NCURSES UART Interface.
+// 
+// auth: pawlex (github.com/pawlex)
+// date: 20210104
 //======================================================================
 
 // Include common routines
