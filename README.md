@@ -1,17 +1,23 @@
-# BASIC Verilog and System Verilog Simulation Environment
-## Using icarus verilog and gtkwave
+# AVR (ATMEGA328p) 
+## Verilog model with UART Simulation model and toolchain using verilator, icarus and gtkwave
 
-### Components
-tb.v : test bench stimuli
+### SKEL
 
-top.v: top level module
+### CPU MODEL
+- CORE
+- IO
+- TIMER/COUNTER
+- INTERRUPT
+- UART
+### SIMULATION MODELS
+- Icarus
+- - TestBench (Verilog)
+- Verilator
+- - TestBench (Verilog)
+- - Verilator Interface (C++)
+### SOFTWARE FRAMEWORK
+- C/C++
+- ASM
 
-compile: compiles and runs simulation and launches gtk-wave with the output .vcd
-### Requirements
-Linux env
-
-Icarus verilog compiler [apt-get install iverilog]
-
-GTKWAVE [apt-get install gtkwave]
-
-![gtkwave](gtkwave.png)
+### HELPER TOOLS
+- Makefiles
