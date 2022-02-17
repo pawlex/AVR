@@ -1,4 +1,4 @@
-#define		F_CPU		12000000UL
+#define     F_CPU       12000000UL
 
 #include <avr/cpufunc.h>
 #include <avr/interrupt.h>
@@ -8,56 +8,56 @@
 
 /*****************************************************************************/
 
-#define		__IOR(x)	(*(volatile uint8_t *)(0x20+(x)))
-#define		__IOW(x)	(*(volatile uint16_t *)(0x20+(x)))
+#define     __IOR(x)    (*(volatile uint8_t *)(0x20+(x)))
+#define     __IOW(x)    (*(volatile uint16_t *)(0x20+(x)))
 
 /*****************************************************************************/
 
 
-#define		IO_BASE_UART0		0x00
-#define		IO_BASE_PORTOUT0	0x04
-#define		IO_BASE_TIMER0		0x08
+#define     IO_BASE_UART0       0x00
+#define     IO_BASE_PORTOUT0    0x04
+#define     IO_BASE_TIMER0      0x08
 
 /* uart.h */
 
-#define		UDR0		__IOR(IO_BASE_UART0+0x00)
-#define		UCSRA0		__IOR(IO_BASE_UART0+0x01)
-#define		UCSRB0		__IOR(IO_BASE_UART0+0x02)
-#define		UBRR0		__IOR(IO_BASE_UART0+0x03)
+#define     UDR0        __IOR(IO_BASE_UART0+0x00)
+#define     UCSRA0      __IOR(IO_BASE_UART0+0x01)
+#define     UCSRB0      __IOR(IO_BASE_UART0+0x02)
+#define     UBRR0       __IOR(IO_BASE_UART0+0x03)
 
 /* UCSRA */
-#define		RXB8		0
-#define		PE		2
-#define		DOR		3
-#define		FE		4
-#define		UDRE		5
-#define		TXC		6
-#define		RXC		7
+#define     RXB8        0
+#define     PE      2
+#define     DOR     3
+#define     FE      4
+#define     UDRE        5
+#define     TXC     6
+#define     RXC     7
 
 /* UCSRB */
-#define		TXB8		0
-#define		UCSZ		1
-#define		UPM0		2
-#define		UPM1		3
-#define		USBS		4
-#define		UDRIE		5
-#define		TXCIE		6
-#define		RXCIE		7	
+#define     TXB8        0
+#define     UCSZ        1
+#define     UPM0        2
+#define     UPM1        3
+#define     USBS        4
+#define     UDRIE       5
+#define     TXCIE       6
+#define     RXCIE       7   
 
 /* timer.h */
 
-#define		TCNT0		__IOW(IO_BASE_TIMER0+0x00)
-#define		TCR0		__IOR(IO_BASE_TIMER0+0x02)
-#define		TSR0		__IOR(IO_BASE_TIMER0+0x03)
+#define     TCNT0       __IOW(IO_BASE_TIMER0+0x00)
+#define     TCR0        __IOR(IO_BASE_TIMER0+0x02)
+#define     TSR0        __IOR(IO_BASE_TIMER0+0x03)
 
-#define		TOF		7	/* timer overflow */
-#define		TOFIE		7	/* timer overflow interrupt enable */
-#define		TPRESC0		0	/* timer prescaler bit 0 */
-#define		TPRESC1		1	/* timer prescaler bit 1 */
+#define     TOF     7   /* timer overflow */
+#define     TOFIE       7   /* timer overflow interrupt enable */
+#define     TPRESC0     0   /* timer prescaler bit 0 */
+#define     TPRESC1     1   /* timer prescaler bit 1 */
 
 /* port.h */
 
-#define		PORTOUT0	__IOR(IO_BASE_PORTOUT0+0x00)
+#define     PORTOUT0    __IOR(IO_BASE_PORTOUT0+0x00)
 
 /*****************************************************************************/
 
@@ -75,7 +75,7 @@ static FILE mystdout = FDEV_SETUP_STREAM(uart_putchar, NULL, _FDEV_SETUP_WRITE);
 /* RXC */
 ISR(_VECTOR(3))
 {
- uint8_t	c;
+ uint8_t    c;
  c=UDR0;
  if ( 'a' <= c && c <= 'z' )     c-=('a'-'A');
  UDR0=c;
@@ -90,8 +90,8 @@ ISR(_VECTOR(1))
 static inline void usleep(uint16_t usec)
 {
  while ( usec )
-  {	_delay_loop_2((uint32_t)F_CPU/4000000UL);
-	usec--;
+  { _delay_loop_2((uint32_t)F_CPU/4000000UL);
+    usec--;
   }
 }
 
@@ -99,15 +99,15 @@ static inline void usleep(uint16_t usec)
 static inline void msleep(uint16_t msec)
 {
  while ( msec )
-  {	_delay_loop_2((uint32_t)F_CPU/4000UL);
-	msec--;
+  { _delay_loop_2((uint32_t)F_CPU/4000UL);
+    msec--;
   }
 }
 
 //static void test_memory_buffer(void)
 //{
-// static char *	string="0123456789";
-// uint8_t	length=10,offset,cnt;
+// static char *    string="0123456789";
+// uint8_t  length=10,offset,cnt;
 //
 // //msleep(10);
 // usleep(100);
@@ -115,20 +115,20 @@ static inline void msleep(uint16_t msec)
 // offset=0;
 // cnt=0;
 // while ( 1 )
-//  {	uint8_t	c;
+//  {   uint8_t c;
 //
-//	while ( ! (UCSRA0&(1<<RXC)) );
-//	c=UDR0;
+//  while ( ! (UCSRA0&(1<<RXC)) );
+//  c=UDR0;
 //
-//	if ( c != 10 )
-//	 {	c=string[offset];
-//		offset++;
-//		if ( length==offset )	offset=0;
-//	 }
+//  if ( c != 10 )
+//   {  c=string[offset];
+//      offset++;
+//      if ( length==offset )   offset=0;
+//   }
 //
-//	UDR0=c; 
-//	cnt++;
-//	PORTOUT0=cnt&3;
+//  UDR0=c; 
+//  cnt++;
+//  PORTOUT0=cnt&3;
 //  };
 // 
 //
@@ -137,33 +137,38 @@ static inline void msleep(uint16_t msec)
 //static void test_uppercase(void)
 //{
 // while ( 1 )
-//  {	uint8_t	c;
-//	while ( ! (UCSRA0&(1<<RXC)) );
-//	c=UDR0;
-//	if ( 'a' <= c && c <= 'z' )	c-=('a'-'A');
-//	while ( ! (UCSRA0&(1<<UDRE)) );
-//	UDR0=c; 
+//  {   uint8_t c;
+//  while ( ! (UCSRA0&(1<<RXC)) );
+//  c=UDR0;
+//  if ( 'a' <= c && c <= 'z' ) c-=('a'-'A');
+//  while ( ! (UCSRA0&(1<<UDRE)) );
+//  UDR0=c; 
 //  };
 // 
 //}
 
 static void test_printf(void)
 {
- int	i;
-
- stdout=&mystdout;
-
- i=0;
- PORTOUT0 = 0x90;
- PORTOUT0 ^= 0x03;
-
- while ( 1 )
-  {	PORTOUT0 ^= 0x03;
-	printf("[x] %d => %d\n",i,i*i);
-	//msleep(1);
-    usleep(1);
-	i++;
-  }
+    stdout=&mystdout;
+    uint16_t i=0;
+    //printf("char   is %d bytes\n", sizeof(char));
+    //printf("int    is %d bytes\n", sizeof(int));
+    //printf("long   is %d bytes\n", sizeof(long));
+    //printf("double is %d bytes\n", sizeof(double));
+    //printf("float  is %d bytes\n", sizeof(float));
+    //PORTOUT0 = 0x90;
+    //PORTOUT0 ^= 0x03;
+    while ( 1 )
+    {   
+        //PORTOUT0 ^= 0x03;
+        printf("[x] 0x%04x => %08d\n",i,i*i);
+        //printf("[x] 0x%04x => %05.02f\n",i,(float)i/2);
+        printf("[x] 0x%04x => %08d\n",i,i%11);
+        printf("[x] 0x%04x => 0x%06x\n",i,i^0x5555);
+        //msleep(1);
+        //usleep(1);
+        i++;
+    }
 }
 
 void test_interrupt(void)
@@ -175,9 +180,9 @@ void test_interrupt(void)
 
  sei();
  while ( 1 )
-  {	PORTOUT0 ^= 0x01;
-	//msleep(500);
-	usleep(100);
+  { PORTOUT0 ^= 0x01;
+    //msleep(500);
+    usleep(100);
   }
 }
 
@@ -199,19 +204,19 @@ void mytest(void)
 
 int main(void)
 {
-#define PRESCALE 20
- //UBRR0 = PRESCALE+1; // +1 to match TB uart.
- UBRR0 = 20-1; // +1 to match TB uart.
-    mytest();
- //test_printf();
+#define PRESCALE 1
+ UBRR0 = PRESCALE-1; // +1 to match TB uart.
+ //UBRR0 = 20-1; // +1 to match TB uart.
+ //   mytest();
+ test_printf();
  //test_interrupt();
  //test_uppercase();
  //test_memory_buffer();
 
- //uint8_t	c;
+ //uint8_t  c;
  //c=0;
  //while ( 1 )
- // {	msleep(500);
+ // {   msleep(500);
  //   PORTOUT0=c;
  //   UDR0='a'+c;
  //   c=(c+1)%4;
